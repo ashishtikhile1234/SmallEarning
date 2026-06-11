@@ -2,11 +2,12 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { GbToastOutletComponent } from '../gb-toast/gb-toast.component';
 
 @Component({
   selector: 'app-shell',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, GbToastOutletComponent],
   template: `
     <div class="app-shell">
       <aside class="sidebar">
@@ -96,6 +97,7 @@ import { AuthService } from '../../services/auth.service';
           <router-outlet />
         </main>
       </div>
+      <gb-toast-outlet />
     </div>
   `,
   styles: [`
@@ -240,6 +242,7 @@ export class AppShellComponent {
     if (url.startsWith('/notifications'))return '🔔 Notifications';
     if (url.startsWith('/profile'))      return '👤 Profile';
     if (url.startsWith('/leaderboard'))  return '🏆 Leaderboard';
+    if (url.startsWith('/onboarding'))   return '🐣 Setup Profile';
     return '🏠 GigBuddy';
   }
 
