@@ -35,6 +35,28 @@
     }
   </div>
 
+  <!-- City + Sort filter bar -->
+  <div class="filter-bar">
+    <div class="city-input-wrap">
+      <span class="filter-icon">📍</span>
+      <input
+        class="city-input"
+        type="text"
+        placeholder="City (e.g. Pune)"
+        [(ngModel)]="cityFilter"
+        (keyup.enter)="applyFilters()"
+      />
+      @if (cityFilter) {
+        <button class="clear-city" (click)="cityFilter=''; applyFilters()">✕</button>
+      }
+    </div>
+    <select class="sort-select" [(ngModel)]="sortBy" (change)="applyFilters()">
+      @for (opt of sortOptions; track opt.value) {
+        <option [value]="opt.value">{{ opt.label }}</option>
+      }
+    </select>
+  </div>
+
   <!-- Swipe tip -->
   @if (showTip()) {
     <div class="swipe-tip animate-slide-up">

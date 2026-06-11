@@ -2,6 +2,7 @@ import {
   Component, OnInit, ViewChild, signal, QueryList, ViewChildren
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GigService } from '../../services/gig.service';
 import { Gig, CATEGORY_CONFIG, GigCategory } from '../../models/gig.model';
@@ -11,7 +12,7 @@ import { ConfettiComponent } from '../../components/confetti/confetti.component'
 @Component({
   selector: 'app-browse',
   standalone: true,
-  imports: [CommonModule, SwipeCardComponent, ConfettiComponent],
+  imports: [CommonModule, FormsModule, SwipeCardComponent, ConfettiComponent],
   templateUrl: './browse.component.html',
   styleUrls: ['./browse.component.scss']
 })
@@ -27,6 +28,16 @@ export class BrowseComponent implements OnInit {
   selectedCategory = signal<GigCategory | 'all'>('all');
   showTip = signal(true);
   showAcceptToast = signal(false);
+  cityFilter = '';
+  sortBy = 'newest';
+  loading = signal(false);
+
+  sortOptions = [
+    { value: 'newest',   label: '🕒 Newest' },
+    { value: 'pay_desc', label: '💰 Pay: High→Low' },
+    { value: 'pay_asc',  label: '💸 Pay: Low→High' },
+    { value: 'duration', label: '⏱️ Shortest First' },
+  ];
 
   categories = Object.entries(CATEGORY_CONFIG).map(([key, val]) => ({
     key: key as GigCategory,
@@ -36,19 +47,27 @@ export class BrowseComponent implements OnInit {
   constructor(private gigService: GigService, private router: Router) {}
 
   ngOnInit() {
-    this.gigService.getGigs().subscribe({
+    this.loadGigs();
+    setTimeout(() => this.showTip.set(false), 4000);
+  }
+
+  loadGigs() {
+    this.loading.set(true);
+    const cat = this.selectedCategory() === 'all' ? undefined : this.selectedCategory();
+    this.gigService.getGigs(cat, this.cityFilter || undefined, this.sortBy).subscribe({
       next: apiGigs => {
         this.allGigs = apiGigs.length > 0
           ? this.gigService.mapGigs(apiGigs)
           : this.gigService.getMockGigs();
         this.resetStack();
+        this.loading.set(false);
       },
       error: () => {
         this.allGigs = this.gigService.getMockGigs();
         this.resetStack();
+        this.loading.set(false);
       }
     });
-    setTimeout(() => this.showTip.set(false), 4000);
   }
 
   get totalInCategory(): number {
@@ -109,13 +128,17 @@ export class BrowseComponent implements OnInit {
 
   setCategory(cat: GigCategory | 'all') {
     this.selectedCategory.set(cat);
-    this.resetStack();
+    this.loadGigs();
     this.showTip.set(true);
     setTimeout(() => this.showTip.set(false), 3000);
   }
 
   reloadAll() {
-    this.resetStack();
+    this.loadGigs();
+  }
+
+  applyFilters() {
+    this.loadGigs();
   }
 
   goHome() {

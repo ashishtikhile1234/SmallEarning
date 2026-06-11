@@ -83,10 +83,11 @@ export class GigService {
 
   constructor(private http: HttpClient) {}
 
-  getGigs(category?: string, location?: string): Observable<GigApiResponse[]> {
+  getGigs(category?: string, location?: string, sort?: string): Observable<GigApiResponse[]> {
     let params = new HttpParams();
     if (category && category !== 'all') params = params.set('category', category.toUpperCase());
     if (location) params = params.set('location', location);
+    if (sort) params = params.set('sort', sort);
     return this.http.get<GigApiResponse[]>(`${API_BASE}/gigs`, { params }).pipe(
       catchError(() => of([]))
     );
