@@ -18,6 +18,30 @@ export const routes: Routes = [
       import('./pages/gig-detail/gig-detail.component').then(m => m.GigDetailComponent)
   },
   {
+    path: 'post-gig',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/post-gig/post-gig.component').then(m => m.PostGigComponent)
+  },
+  {
+    path: 'my-gigs',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/my-gigs/my-gigs.component').then(m => m.MyGigsComponent)
+  },
+  {
+    path: 'profile',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/profile/profile.component').then(m => m.ProfileComponent)
+  },
+  {
+    path: 'notifications',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/notifications/notifications.component').then(m => m.NotificationsComponent)
+  },
+  {
     path: 'login',
     canActivate: [guestGuard],
     loadComponent: () =>
