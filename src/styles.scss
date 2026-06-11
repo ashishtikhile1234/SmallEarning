@@ -120,3 +120,87 @@ body {
 .animate-slide-up { animation: slide-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
 .animate-scale-in { animation: scale-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
 .animate-float { animation: float 4s ease-in-out infinite; }
+
+/* ===== MOBILE RESPONSIVE — Global Rules ===== */
+
+/* Touch-friendly minimum tap target */
+button, a, [role="button"] {
+  min-height: 36px;
+  touch-action: manipulation;
+}
+
+/* Mobile bottom navigation bar */
+@media (max-width: 768px) {
+  /* App shell: hide sidebar, show bottom tab bar */
+  app-shell .sidebar {
+    display: none !important;
+  }
+
+  app-shell .main-area {
+    padding-bottom: 64px; /* space for bottom nav */
+  }
+
+  /* Bottom tab navigation */
+  app-shell::after {
+    content: '';
+    /* placeholder — actual nav is in app-shell component */
+  }
+}
+
+/* Fluid typography */
+@media (max-width: 480px) {
+  html { font-size: 14px; }
+
+  /* Cards: full-width on mobile */
+  .card, [class*="-card"] {
+    border-radius: 16px !important;
+  }
+
+  /* Topbar */
+  .topbar {
+    padding: 10px 14px !important;
+  }
+
+  /* Gig detail page */
+  .gig-detail-page {
+    padding: 0 !important;
+  }
+
+  /* Profile grids → single column */
+  .stats-grid, .info-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  /* Leaderboard */
+  .podium { gap: 8px !important; }
+
+  /* Browse filter bar stacks */
+  .filter-bar {
+    flex-direction: column !important;
+  }
+}
+
+/* Swipe card full-screen on mobile */
+@media (max-width: 480px) {
+  .browse-page {
+    max-width: 100% !important;
+  }
+
+  .card-stack {
+    max-height: 72dvh !important;
+  }
+}
+
+/* Prevent text select on swipe interactions */
+.swipe-card, app-swipe-card {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Safe area insets (iOS notch/home bar) */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .progress-footer, .action-bar {
+    padding-bottom: max(24px, env(safe-area-inset-bottom)) !important;
+  }
+}
+

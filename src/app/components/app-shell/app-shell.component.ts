@@ -97,6 +97,26 @@ import { GbToastOutletComponent } from '../gb-toast/gb-toast.component';
           <router-outlet />
         </main>
       </div>
+
+      <!-- Mobile bottom tab bar -->
+      <nav class="mobile-tabs">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="tab-item">
+          <span class="tab-icon">🏠</span><span class="tab-label">Home</span>
+        </a>
+        <a routerLink="/browse" routerLinkActive="active" class="tab-item">
+          <span class="tab-icon">🃏</span><span class="tab-label">Browse</span>
+        </a>
+        <a routerLink="/my-gigs" routerLinkActive="active" class="tab-item">
+          <span class="tab-icon">📋</span><span class="tab-label">My Gigs</span>
+        </a>
+        <a routerLink="/leaderboard" routerLinkActive="active" class="tab-item">
+          <span class="tab-icon">🏆</span><span class="tab-label">Rank</span>
+        </a>
+        <a routerLink="/profile" routerLinkActive="active" class="tab-item">
+          <span class="tab-icon">👤</span><span class="tab-label">Me</span>
+        </a>
+      </nav>
+
       <gb-toast-outlet />
     </div>
   `,
@@ -213,6 +233,25 @@ import { GbToastOutletComponent } from '../gb-toast/gb-toast.component';
       font-size: 0.85rem; font-weight: 700; text-decoration: none;
     }
     .page-content { flex: 1; overflow-y: auto; padding: 0; }
+
+    /* Mobile bottom tab bar */
+    .mobile-tabs {
+      display: none;
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(13,13,18,0.95); backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 6px 0 max(8px, env(safe-area-inset-bottom, 8px));
+    }
+    .tab-item {
+      flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;
+      text-decoration: none; color: rgba(255,255,255,0.45);
+      font-size: 0.65rem; font-weight: 600; padding: 4px 0;
+      transition: color 0.15s ease;
+    }
+    .tab-item.active { color: #FF4D6D; }
+    .tab-icon { font-size: 1.35rem; line-height: 1; }
+    .tab-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.04em; }
+
     @media (max-width: 900px) {
       .sidebar { width: 64px; padding: 14px 6px; }
       .brand-text, .nav-section, .nav-item span:not(.nav-icon),
@@ -221,6 +260,12 @@ import { GbToastOutletComponent } from '../gb-toast/gb-toast.component';
       .sidebar-brand { justify-content: center; padding-bottom: 14px; }
       .user-card { justify-content: center; padding: 8px; }
       .topbar { padding: 12px 16px; }
+    }
+    @media (max-width: 768px) {
+      .sidebar { display: none !important; }
+      .mobile-tabs { display: flex !important; }
+      .main-area { padding-bottom: 0; }
+      .page-content { padding-bottom: 72px; }
     }
   `]
 })
