@@ -1,0 +1,88 @@
+<div
+  class="swipe-card"
+  #card
+  [ngStyle]="getStackStyle()"
+  [class.top-card]="isTop"
+  [class.is-dragging]="isDragging"
+>
+  <!-- Accept / Pass stamps -->
+  <div class="stamp accept-stamp" [class.visible]="swipeIndicator === 'right'" [style.opacity]="getStampOpacity('right')">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+    ACCEPT
+  </div>
+  <div class="stamp pass-stamp" [class.visible]="swipeIndicator === 'left'" [style.opacity]="getStampOpacity('left')">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+    PASS
+  </div>
+
+  <!-- Gradient overlay on drag -->
+  <div class="drag-overlay accept-overlay" [style.opacity]="getOverlayOpacity('right')"></div>
+  <div class="drag-overlay pass-overlay" [style.opacity]="getOverlayOpacity('left')"></div>
+
+  <!-- Hero image area -->
+  <div class="card-hero" [style.background]="'linear-gradient(160deg, ' + gig.color + ' 0%, ' + gig.accentColor + ' 40%, #0D0D12 100%)'">
+    <div class="hero-pattern"></div>
+    <div class="hero-emoji">{{ gig.emoji }}</div>
+
+    @if (gig.isUrgent) {
+      <span class="urgent-pill animate-pulse-urgent">Hiring Now</span>
+    }
+
+    <div class="hero-pay">
+      <span class="pay-amount">{{ gig.pay }}</span>
+      <span class="pay-type">{{ gig.payType === 'hourly' ? '/hr' : ' fixed' }}</span>
+    </div>
+  </div>
+
+  <!-- Card content -->
+  <div class="card-content">
+    <div class="employer-row">
+      <div class="employer-avatar" [style.background]="gig.color + '30'">{{ gig.employer.charAt(0) }}</div>
+      <div class="employer-info">
+        <span class="employer-name">{{ gig.employer }}</span>
+        <span class="posted-time">{{ gig.postedAgo }}</span>
+      </div>
+      <span class="category-chip" [style.background]="gig.color + '25'" [style.color]="gig.color">
+        {{ gig.category | titlecase }}
+      </span>
+    </div>
+
+    <h2 class="job-title">{{ gig.title }}</h2>
+
+    <div class="meta-row">
+      <div class="meta-chip">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+        </svg>
+        {{ gig.duration }}
+      </div>
+      <div class="meta-chip">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+        </svg>
+        {{ gig.area }}
+      </div>
+      <div class="meta-chip">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        {{ gig.date }}
+      </div>
+    </div>
+
+    <p class="job-desc">{{ gig.description }}</p>
+
+    @if (gig.tags.length > 0) {
+      <div class="tags">
+        @for (tag of gig.tags.slice(0, 3); track tag) {
+          <span class="tag">{{ tag }}</span>
+        }
+      </div>
+    }
+  </div>
+</div>
