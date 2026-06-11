@@ -1,0 +1,112 @@
+<div class="browse-page">
+  <app-confetti></app-confetti>
+
+  <!-- Ambient background -->
+  <div class="ambient-glow"></div>
+
+  <!-- Top bar -->
+  <header class="top-bar">
+    <button class="nav-btn" (click)="goHome()" title="Home">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+      </svg>
+    </button>
+    <div class="logo">Gig<span>Buddy</span></div>
+    <div class="stats-pills">
+      <span class="pill accepted">{{ acceptedCount() }} accepted</span>
+      <span class="pill passed">{{ passedCount() }} passed</span>
+    </div>
+  </header>
+
+  <!-- Category filter -->
+  <div class="category-bar">
+    <button
+      class="cat-btn"
+      [class.active]="selectedCategory() === 'all'"
+      (click)="setCategory('all')"
+    >All</button>
+    @for (cat of categories; track cat.key) {
+      <button
+        class="cat-btn"
+        [class.active]="selectedCategory() === cat.key"
+        (click)="setCategory(cat.key)"
+        [style.--cat-color]="cat.color"
+      >{{ cat.emoji }} {{ cat.label }}</button>
+    }
+  </div>
+
+  <!-- Swipe tip -->
+  @if (showTip()) {
+    <div class="swipe-tip animate-slide-up">
+      <span class="tip-left">← Pass</span>
+      <span class="tip-divider">swipe the card</span>
+      <span class="tip-right">Accept →</span>
+    </div>
+  }
+
+  <!-- Card stack -->
+  <div class="stack-area">
+    @if (visibleGigs.length > 0) {
+      <div class="card-stack">
+        @for (gig of visibleGigs; track gig.id; let i = $index) {
+          <app-swipe-card
+            [gig]="gig"
+            [zIndex]="i + 1"
+            [isTop]="i === visibleGigs.length - 1"
+            [stackOffset]="visibleGigs.length - 1 - i"
+            (swiped)="onSwiped($event, gig)"
+          />
+        }
+      </div>
+    } @else {
+      <div class="empty-state animate-scale-in">
+        <div class="empty-icon">✨</div>
+        <h3>You're all caught up!</h3>
+        <p>You've seen every gig in this category. Reload to start fresh.</p>
+        <button class="reload-btn" (click)="reloadAll()">Reload Gigs</button>
+      </div>
+    }
+  </div>
+
+  <!-- Action buttons -->
+  @if (visibleGigs.length > 0) {
+    <div class="action-bar">
+      <button class="action-btn pass-btn" (click)="triggerSwipeLeft()" title="Pass">
+        <span class="btn-ring"></span>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+
+      <button class="action-btn info-btn" (click)="viewCurrentGig()" title="View details">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+      </button>
+
+      <button class="action-btn accept-btn" (click)="triggerSwipeRight()" title="Accept">
+        <span class="btn-ring accept-ring"></span>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="progress-footer">
+      <div class="progress-track">
+        <div class="progress-fill" [style.width.%]="progressPercent"></div>
+      </div>
+      <span class="progress-text">{{ doneGigs.length }} of {{ totalInCategory }} reviewed</span>
+    </div>
+  }
+
+  <!-- Accept toast -->
+  @if (showAcceptToast()) {
+    <div class="accept-toast animate-slide-up">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      Job accepted! Application sent
+    </div>
+  }
+</div>
