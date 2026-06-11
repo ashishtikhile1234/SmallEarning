@@ -1,4 +1,4 @@
-import { Component, signal, inject, OnInit } from '@angular/core';
+import { Component, signal, inject, OnInit, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -287,7 +287,7 @@ export class LeaderboardComponent implements OnInit {
 
   leaders = signal<LeaderEntry[]>([]);
   allBadges = BADGE_DEFS;
-  currentUserId = this.auth.currentUser;
+  currentUserId = computed(() => this.auth.currentUser()?.userId ?? -1);
 
   ngOnInit() {
     this.http.get<LeaderEntry[]>('http://localhost:8080/api/leaderboard?limit=10')

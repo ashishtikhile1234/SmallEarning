@@ -28,7 +28,17 @@ export class GigDetailComponent implements OnInit {
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.gig = this.gigService.getGigById(id) ?? this.gigService.selectedGig() ?? null;
+    // Try selected gig first (already mapped)
+    const selected = this.gigService.selectedGig();
+    if (selected && selected.id === id) {
+      this.gig = selected;
+      return;
+    }
+    // Otherwise fetch from backend
+    this.gigService.getGigById(id).subscribe({
+      next: api => { this.gig = this.gigService.mapGig(api); },
+      error: () => { this.gig = this.gigService.getMockGigById(id) ?? null; }
+    });
   }
 
   goBack() {

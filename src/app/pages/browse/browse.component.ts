@@ -36,8 +36,18 @@ export class BrowseComponent implements OnInit {
   constructor(private gigService: GigService, private router: Router) {}
 
   ngOnInit() {
-    this.allGigs = this.gigService.getGigs();
-    this.resetStack();
+    this.gigService.getGigs().subscribe({
+      next: apiGigs => {
+        this.allGigs = apiGigs.length > 0
+          ? this.gigService.mapGigs(apiGigs)
+          : this.gigService.getMockGigs();
+        this.resetStack();
+      },
+      error: () => {
+        this.allGigs = this.gigService.getMockGigs();
+        this.resetStack();
+      }
+    });
     setTimeout(() => this.showTip.set(false), 4000);
   }
 

@@ -16,7 +16,10 @@ export class HomeComponent implements OnInit {
   constructor(private router: Router, private gigService: GigService) {}
 
   ngOnInit() {
-    this.totalGigs = this.gigService.getGigs().length;
+    this.gigService.getGigs().subscribe({
+      next: gigs => this.totalGigs = gigs.length || this.gigService.getMockGigs().length,
+      error: () => this.totalGigs = this.gigService.getMockGigs().length
+    });
   }
 
   startBrowsing() {

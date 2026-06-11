@@ -37,14 +37,14 @@ import { Gig } from '../../models/gig.model';
         <div class="gig-card" *ngFor="let gig of savedGigs()">
 
           <div class="card-header">
-            <div class="category-emoji">{{ gig.categoryEmoji }}</div>
+            <div class="category-emoji">{{ gig.emoji }}</div>
             <div class="card-actions">
               <button class="unsave-btn" (click)="unsaveGig(gig)" title="Remove bookmark">🗑️</button>
             </div>
           </div>
 
           <div class="gig-title">{{ gig.title }}</div>
-          <div class="gig-company">🏪 {{ gig.company }}</div>
+          <div class="gig-company">🏪 {{ gig.employer }}</div>
 
           <div class="gig-meta">
             <span>📍 {{ gig.location }}</span>
@@ -52,12 +52,12 @@ import { Gig } from '../../models/gig.model';
           </div>
 
           <div class="gig-pay">
-            💰 ₹{{ gig.payMin }} - ₹{{ gig.payMax }}
-            <span class="pay-type">/ {{ gig.payType === 'HOURLY' ? 'hr' : 'fixed' }}</span>
+            💰 {{ gig.pay }}
+            <span class="pay-type">({{ gig.payType === 'hourly' ? 'hourly' : 'fixed' }})</span>
           </div>
 
           <div class="card-footer">
-            <span class="slots">👥 {{ gig.slotsAvailable }} spots left</span>
+            <span class="slots">👥 {{ gig.slots }} spots left</span>
             <a [routerLink]="['/gig', gig.id]" class="view-btn">View & Apply →</a>
           </div>
         </div>
@@ -206,32 +206,33 @@ export class SavedGigsComponent implements OnInit {
   loading = signal(true);
 
   ngOnInit() {
-    const token = this.auth.token();
+    const token = this.auth.getToken();
     if (!token) {
       this.loading.set(false);
+      // Show mock bookmarked gigs from localStorage
+      const raw = localStorage.getItem('gb_saved_gigs');
+      const ids: number[] = raw ? JSON.parse(raw) : [];
+      this.savedGigs.set(this.gigService.getMockGigs().filter(g => ids.includes(+g.id)));
       return;
     }
 
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    this.http.get<Gig[]>('http://localhost:8080/api/saved-gigs', { headers }).subscribe({
+    this.http.get<any[]>('http://localhost:8080/api/saved-gigs', { headers }).subscribe({
       next: data => {
-        this.savedGigs.set(data);
+        this.savedGigs.set(this.gigService.mapGigs(data));
         this.loading.set(false);
       },
       error: () => {
-        // Fallback to local mock bookmarks stored in localStorage
         const raw = localStorage.getItem('gb_saved_gigs');
         const ids: number[] = raw ? JSON.parse(raw) : [];
-        this.gigService.getGigs().subscribe(gigs => {
-          this.savedGigs.set(gigs.filter(g => ids.includes(+g.id)));
-          this.loading.set(false);
-        });
+        this.savedGigs.set(this.gigService.getMockGigs().filter(g => ids.includes(+g.id)));
+        this.loading.set(false);
       }
     });
   }
 
   unsaveGig(gig: Gig) {
-    const token = this.auth.token();
+    const token = this.auth.getToken();
     const headers = new HttpHeaders({ Authorization: `Bearer ${token ?? ''}` });
 
     this.http.delete(`http://localhost:8080/api/saved-gigs/${gig.id}`, { headers }).subscribe({

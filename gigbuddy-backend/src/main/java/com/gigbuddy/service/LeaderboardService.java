@@ -27,7 +27,7 @@ public class LeaderboardService {
                 .filter(u -> u.getRole().name().equals("STUDENT"))
                 .map(u -> {
                     long gigsCompleted = applicationRepository
-                            .findByStudent(u).stream()
+                            .findByStudentOrderByAppliedAtDesc(u).stream()
                             .filter(a -> a.getStatus().name().equals("ACCEPTED"))
                             .count();
 
