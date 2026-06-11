@@ -29,10 +29,19 @@ import { AuthService } from '../../services/auth.service';
             <span>Browse Gigs</span>
           </a>
 
+          <a routerLink="/leaderboard" routerLinkActive="active" class="nav-item">
+            <span class="nav-icon">🏆</span>
+            <span>Leaderboard</span>
+          </a>
+
           <span class="nav-section">My Account</span>
           <a routerLink="/my-gigs" routerLinkActive="active" class="nav-item">
             <span class="nav-icon">📋</span>
             <span>My Gigs</span>
+          </a>
+          <a routerLink="/saved-gigs" routerLinkActive="active" class="nav-item">
+            <span class="nav-icon">🔖</span>
+            <span>Saved Gigs</span>
           </a>
           <a routerLink="/notifications" routerLinkActive="active" class="nav-item">
             <span class="nav-icon">🔔</span>
@@ -227,8 +236,10 @@ export class AppShellComponent {
     if (url.startsWith('/browse'))       return '🃏 Browse Gigs';
     if (url.startsWith('/post-gig'))     return '➕ Post a Gig';
     if (url.startsWith('/my-gigs'))      return '📋 My Gigs';
+    if (url.startsWith('/saved-gigs'))   return '🔖 Saved Gigs';
     if (url.startsWith('/notifications'))return '🔔 Notifications';
     if (url.startsWith('/profile'))      return '👤 Profile';
+    if (url.startsWith('/leaderboard'))  return '🏆 Leaderboard';
     return '🏠 GigBuddy';
   }
 

@@ -42,6 +42,17 @@ export const routes: Routes = [
       import('./pages/notifications/notifications.component').then(m => m.NotificationsComponent)
   },
   {
+    path: 'leaderboard',
+    loadComponent: () =>
+      import('./pages/leaderboard/leaderboard.component').then(m => m.LeaderboardComponent)
+  },
+  {
+    path: 'saved-gigs',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/saved-gigs/saved-gigs.component').then(m => m.SavedGigsComponent)
+  },
+  {
     path: 'login',
     canActivate: [guestGuard],
     loadComponent: () =>
