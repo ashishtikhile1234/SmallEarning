@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { GigService } from '../../services/gig.service';
+import { GbMascotComponent } from '../../components/gb-mascot/gb-mascot.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, GbMascotComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
