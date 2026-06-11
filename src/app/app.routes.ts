@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard, guestGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -15,6 +16,18 @@ export const routes: Routes = [
     path: 'gig/:id',
     loadComponent: () =>
       import('./pages/gig-detail/gig-detail.component').then(m => m.GigDetailComponent)
+  },
+  {
+    path: 'login',
+    canActivate: [guestGuard],
+    loadComponent: () =>
+      import('./pages/login/login.component').then(m => m.LoginComponent)
+  },
+  {
+    path: 'signup',
+    canActivate: [guestGuard],
+    loadComponent: () =>
+      import('./pages/signup/signup.component').then(m => m.SignupComponent)
   },
   {
     path: '**',
