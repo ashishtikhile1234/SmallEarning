@@ -2,6 +2,7 @@ package com.gigbuddy.service;
 
 import com.gigbuddy.dto.application.*;
 import com.gigbuddy.model.*;
+import com.gigbuddy.model.enums.ApplicationStatus;
 import com.gigbuddy.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
@@ -15,6 +16,7 @@ public class ApplicationService {
 
     private final ApplicationRepository applicationRepository;
     private final GigRepository gigRepository;
+    private final NotificationService notificationService;
 
     public ApplicationResponse applyToGig(ApplicationRequest request, User student) {
         Gig gig = gigRepository.findById(request.getGigId())
@@ -30,7 +32,16 @@ public class ApplicationService {
                 .message(request.getMessage())
                 .build();
 
-        return ApplicationResponse.from(applicationRepository.save(application));
+        Application saved = applicationRepository.save(application);
+
+        // 🔔 Notify employer: new application received
+        notificationService.send(
+                gig.getEmployer(),
+                "📩 New application from " + student.getName() + " for \"" + gig.getTitle() + "\"",
+                "APPLICATION_RECEIVED"
+        );
+
+        return ApplicationResponse.from(saved);
     }
 
     public List<ApplicationResponse> getMyApplications(User student) {
@@ -54,7 +65,29 @@ public class ApplicationService {
         if (!application.getGig().getEmployer().getId().equals(employer.getId())) {
             throw new AccessDeniedException("Not your gig's application");
         }
-        application.setStatus(request.getStatus());
-        return ApplicationResponse.from(applicationRepository.save(application));
+
+        ApplicationStatus newStatus = request.getStatus();
+        application.setStatus(newStatus);
+        Application saved = applicationRepository.save(application);
+
+        // 🔔 Notify student of decision
+        User student = application.getStudent();
+        String gigTitle = application.getGig().getTitle();
+
+        if (newStatus == ApplicationStatus.ACCEPTED) {
+            notificationService.send(
+                    student,
+                    "🎉 Congratulations! Your application for \"" + gigTitle + "\" was ACCEPTED!",
+                    "APPLICATION_ACCEPTED"
+            );
+        } else if (newStatus == ApplicationStatus.REJECTED) {
+            notificationService.send(
+                    student,
+                    "😔 Your application for \"" + gigTitle + "\" was not selected this time.",
+                    "APPLICATION_REJECTED"
+            );
+        }
+
+        return ApplicationResponse.from(saved);
     }
 }
