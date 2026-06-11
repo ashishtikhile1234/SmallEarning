@@ -53,6 +53,12 @@ export const routes: Routes = [
       import('./pages/saved-gigs/saved-gigs.component').then(m => m.SavedGigsComponent)
   },
   {
+    path: 'onboarding',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/onboarding/onboarding.component').then(m => m.OnboardingComponent)
+  },
+  {
     path: 'login',
     canActivate: [guestGuard],
     loadComponent: () =>
