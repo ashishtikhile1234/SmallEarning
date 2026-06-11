@@ -1,0 +1,85 @@
+<div class="home-page">
+  <div class="bg-gradient"></div>
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <div class="content">
+    <!-- Logo -->
+    <div class="logo animate-scale-in">
+      Gig<span>Buddy</span>
+    </div>
+
+    <!-- Tagline -->
+    <div class="tagline animate-slide-up">
+      <h1>Swipe.<br>Match.<br><span class="highlight">Earn.</span></h1>
+      <p>Find part-time gigs like your favorite social app. Swipe right to accept, left to pass.</p>
+    </div>
+
+    <!-- Card preview stack -->
+    <div class="preview-stack animate-scale-in">
+      <div class="preview-card card-back-2">
+        <div class="preview-hero" style="background: linear-gradient(160deg, #4D96FF, #1a1a2e)">
+          <span>📚</span>
+        </div>
+        <div class="preview-body">
+          <strong>Book Stall Assistant</strong>
+          <span>₹100/hr · FC Road</span>
+        </div>
+      </div>
+      <div class="preview-card card-back-1">
+        <div class="preview-hero" style="background: linear-gradient(160deg, #FF9F43, #1a1a2e)">
+          <span>☕</span>
+        </div>
+        <div class="preview-body">
+          <strong>Cafe Helper</strong>
+          <span>₹120/hr · Koregaon Park</span>
+        </div>
+      </div>
+      <div class="preview-card card-front animate-float-card">
+        <div class="preview-hero" style="background: linear-gradient(160deg, #FF4D6D, #7C5CFC)">
+          <span>🎉</span>
+          <div class="preview-pay">₹800</div>
+        </div>
+        <div class="preview-body">
+          <strong>Event Coordinator</strong>
+          <span>5 hrs · Viman Nagar</span>
+        </div>
+        <div class="swipe-hints">
+          <span class="hint-pass">← Pass</span>
+          <span class="hint-accept">Accept →</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row animate-slide-up">
+      <div class="stat">
+        <span class="stat-num">{{ totalGigs }}+</span>
+        <span class="stat-label">Gigs</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num">200+</span>
+        <span class="stat-label">Hired</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num">10+</span>
+        <span class="stat-label">Cities</span>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <button class="cta-btn animate-slide-up" (click)="startBrowsing()">
+      Start Swiping
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+      </svg>
+    </button>
+
+    <p class="footer-note">Free for students · No signup needed</p>
+  </div>
+</div>
