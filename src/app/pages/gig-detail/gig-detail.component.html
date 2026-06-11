@@ -1,0 +1,133 @@
+@if (gig) {
+  <div class="detail-page">
+    <app-confetti></app-confetti>
+
+    @if (showSuccessMsg()) {
+      <div class="success-toast animate-slide-up">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        Application sent!
+      </div>
+    }
+
+    <!-- Hero -->
+    <div class="detail-hero" [style.background]="'linear-gradient(160deg, ' + gig.color + ' 0%, ' + gig.accentColor + ' 30%, #0D0D12 100%)'">
+      <div class="hero-top">
+        <button class="back-btn" (click)="goBack()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>
+          </svg>
+        </button>
+        <button class="save-btn" [class.saved]="isSaved()" (click)="toggleSave()">
+          <svg width="20" height="20" viewBox="0 0 24 24" [attr.fill]="isSaved() ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+          </svg>
+        </button>
+      </div>
+      <div class="hero-emoji">{{ gig.emoji }}</div>
+      <div class="hero-pay-badge">{{ gig.pay }}</div>
+    </div>
+
+    <!-- Scrollable body -->
+    <div class="detail-body">
+      <div class="employer-row">
+        <div class="emp-avatar" [style.background]="gig.color + '30'">{{ gig.employer.charAt(0) }}</div>
+        <div>
+          <span class="emp-name">{{ gig.employer }}</span>
+          <span class="emp-meta">{{ gig.category | titlecase }} · {{ gig.postedAgo }}</span>
+        </div>
+        @if (gig.isUrgent) {
+          <span class="urgent-tag">Hiring Now</span>
+        }
+      </div>
+
+      <h1 class="job-title">{{ gig.title }}</h1>
+
+      <div class="info-chips">
+        <div class="chip">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+          {{ gig.duration }}
+        </div>
+        <div class="chip">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+          </svg>
+          {{ gig.area }}, {{ gig.location }}
+        </div>
+        <div class="chip">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          {{ gig.date }} · {{ gig.time }}
+        </div>
+        <div class="chip">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+          </svg>
+          {{ gig.slots }} opening{{ gig.slots > 1 ? 's' : '' }}
+        </div>
+      </div>
+
+      <section class="section">
+        <h3>About this gig</h3>
+        <p>{{ gig.description }}</p>
+      </section>
+
+      <section class="section">
+        <h3>What you'll do</h3>
+        <ul>
+          <li>Customer service & support</li>
+          <li>Assist with {{ gig.category | lowercase }} operations</li>
+          <li>Maintain cleanliness & organization</li>
+          <li>Work as part of a team</li>
+        </ul>
+      </section>
+
+      @if (gig.tags.length > 0) {
+        <section class="section">
+          <h3>Tags</h3>
+          <div class="tags">
+            @for (tag of gig.tags; track tag) {
+              <span class="tag">{{ tag }}</span>
+            }
+          </div>
+        </section>
+      }
+
+      <div class="spacer"></div>
+    </div>
+
+    <!-- Sticky apply bar -->
+    <div class="apply-bar">
+      <div class="apply-info">
+        <span class="apply-pay">{{ gig.pay }}</span>
+        <span class="apply-sub">{{ payBadgeText }}</span>
+      </div>
+      @if (!hasApplied()) {
+        <button class="apply-btn" (click)="apply()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          Accept Job
+        </button>
+      } @else {
+        <div class="applied-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          Accepted
+        </div>
+      }
+    </div>
+  </div>
+} @else {
+  <div class="not-found">
+    <h3>Gig not found</h3>
+    <button class="apply-btn" (click)="goBack()">Back to swiping</button>
+  </div>
+}
