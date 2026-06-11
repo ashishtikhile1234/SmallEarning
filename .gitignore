@@ -40,3 +40,9 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Java / Maven build output
+gigbuddy-backend/target/
+*.class
+*.jar
+*.war
