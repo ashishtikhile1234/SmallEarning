@@ -59,6 +59,12 @@ export const routes: Routes = [
       import('./pages/onboarding/onboarding.component').then(m => m.OnboardingComponent)
   },
   {
+    path: 'chat/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/chat/chat.component').then(m => m.ChatComponent)
+  },
+  {
     path: 'login',
     canActivate: [guestGuard],
     loadComponent: () =>
