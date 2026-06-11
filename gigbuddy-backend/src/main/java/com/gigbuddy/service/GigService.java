@@ -19,9 +19,19 @@ public class GigService {
 
     private final GigRepository gigRepository;
 
-    public List<GigResponse> getAllOpenGigs(GigCategory category, String location) {
-        return gigRepository.findOpenGigsFiltered(category, location)
-                .stream().map(GigResponse::from).toList();
+    public List<GigResponse> getAllOpenGigs(GigCategory category, String location, String sort) {
+        List<Gig> results;
+        if ("pay_desc".equalsIgnoreCase(sort)) {
+            results = gigRepository.findOpenGigsFilteredSortByPayDesc(category, location);
+        } else if ("pay_asc".equalsIgnoreCase(sort)) {
+            results = gigRepository.findOpenGigsFilteredSortByPayAsc(category, location);
+        } else if ("duration".equalsIgnoreCase(sort)) {
+            results = gigRepository.findOpenGigsFilteredSortByDuration(category, location);
+        } else {
+            // default: newest first
+            results = gigRepository.findOpenGigsFiltered(category, location);
+        }
+        return results.stream().map(GigResponse::from).toList();
     }
 
     public GigResponse getGigById(Long id) {

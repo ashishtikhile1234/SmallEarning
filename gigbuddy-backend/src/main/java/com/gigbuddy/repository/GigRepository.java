@@ -23,4 +23,25 @@ public interface GigRepository extends JpaRepository<Gig, Long> {
            "ORDER BY g.createdAt DESC")
     List<Gig> findOpenGigsFiltered(@Param("category") GigCategory category,
                                    @Param("location") String location);
+
+    @Query("SELECT g FROM Gig g WHERE g.status = 'OPEN' " +
+           "AND (:category IS NULL OR g.category = :category) " +
+           "AND (:location IS NULL OR LOWER(g.location) LIKE LOWER(CONCAT('%',:location,'%')))" +
+           "ORDER BY g.payAmount DESC")
+    List<Gig> findOpenGigsFilteredSortByPayDesc(@Param("category") GigCategory category,
+                                                @Param("location") String location);
+
+    @Query("SELECT g FROM Gig g WHERE g.status = 'OPEN' " +
+           "AND (:category IS NULL OR g.category = :category) " +
+           "AND (:location IS NULL OR LOWER(g.location) LIKE LOWER(CONCAT('%',:location,'%')))" +
+           "ORDER BY g.payAmount ASC")
+    List<Gig> findOpenGigsFilteredSortByPayAsc(@Param("category") GigCategory category,
+                                               @Param("location") String location);
+
+    @Query("SELECT g FROM Gig g WHERE g.status = 'OPEN' " +
+           "AND (:category IS NULL OR g.category = :category) " +
+           "AND (:location IS NULL OR LOWER(g.location) LIKE LOWER(CONCAT('%',:location,'%')))" +
+           "ORDER BY g.durationHours ASC")
+    List<Gig> findOpenGigsFilteredSortByDuration(@Param("category") GigCategory category,
+                                                 @Param("location") String location);
 }

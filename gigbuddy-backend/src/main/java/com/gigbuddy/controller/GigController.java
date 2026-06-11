@@ -26,11 +26,12 @@ public class GigController {
     private final GigService gigService;
 
     @GetMapping
-    @Operation(summary = "Get all open gigs (with optional filters)")
+    @Operation(summary = "Get all open gigs (filters: category, location, sort: newest|pay_desc|pay_asc|duration)")
     public ResponseEntity<List<GigResponse>> getAllGigs(
             @RequestParam(required = false) GigCategory category,
-            @RequestParam(required = false) String location) {
-        return ResponseEntity.ok(gigService.getAllOpenGigs(category, location));
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false, defaultValue = "newest") String sort) {
+        return ResponseEntity.ok(gigService.getAllOpenGigs(category, location, sort));
     }
 
     @GetMapping("/{id}")
