@@ -21,7 +21,7 @@ const SKILL_OPTIONS = [
     <div class="onboarding-wrap">
       <!-- Progress dots -->
       <div class="progress-dots">
-        @for (s of steps; track $index; let i = $index) {
+        @for (s of steps; track s; let i = $index) {
           <div class="dot" [class.active]="i === step()" [class.done]="i < step()">
             @if (i < step()) { <span>✓</span> }
           </div>

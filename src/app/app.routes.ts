@@ -65,6 +65,12 @@ export const routes: Routes = [
       import('./pages/chat/chat.component').then(m => m.ChatComponent)
   },
   {
+    path: 'referral',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/referral/referral.component').then(m => m.ReferralComponent)
+  },
+  {
     path: 'login',
     canActivate: [guestGuard],
     loadComponent: () =>

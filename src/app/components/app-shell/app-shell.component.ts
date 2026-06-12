@@ -48,6 +48,10 @@ import { GbToastOutletComponent } from '../gb-toast/gb-toast.component';
             <span class="nav-icon">🔔</span>
             <span>Notifications</span>
           </a>
+          <a routerLink="/referral" routerLinkActive="active" class="nav-item">
+            <span class="nav-icon">🎁</span>
+            <span>Refer & Earn</span>
+          </a>
           <a routerLink="/profile" routerLinkActive="active" class="nav-item">
             <span class="nav-icon">👤</span>
             <span>Profile</span>

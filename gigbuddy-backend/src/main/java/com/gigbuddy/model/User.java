@@ -39,9 +39,21 @@ public class User implements UserDetails {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "referral_code", unique = true)
+    private String referralCode;
+
+    @Column(name = "referred_by")
+    private Long referredBy;
+
+    @Builder.Default
+    private Integer coins = 0;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
+        if (referralCode == null) {
+            referralCode = java.util.UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        }
     }
 
     @Override

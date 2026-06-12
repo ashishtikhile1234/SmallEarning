@@ -16,6 +16,7 @@ export class GigDetailComponent implements OnInit {
   @ViewChild(ConfettiComponent) confetti!: ConfettiComponent;
 
   gig: Gig | null = null;
+  loading = signal(true);
   hasApplied = signal(false);
   isSavedGig = signal(false);
   showSuccessMsg = signal(false);
@@ -32,12 +33,22 @@ export class GigDetailComponent implements OnInit {
     const selected = this.gigService.selectedGig();
     if (selected && selected.id === id) {
       this.gig = selected;
+      this.loading.set(false);
       return;
     }
-    // Otherwise fetch from backend
+    // Otherwise fetch from backend, fallback to mock data
     this.gigService.getGigById(id).subscribe({
-      next: api => { this.gig = this.gigService.mapGig(api); },
-      error: () => { this.gig = this.gigService.getMockGigById(id) ?? null; }
+      next: api => {
+        this.gig = this.gigService.mapGig(api);
+        this.loading.set(false);
+      },
+      error: () => {
+        // Try mock gig by id, or first mock gig as demo
+        this.gig = this.gigService.getMockGigById(id)
+          ?? this.gigService.getMockGigs()[0]
+          ?? null;
+        this.loading.set(false);
+      }
     });
   }
 

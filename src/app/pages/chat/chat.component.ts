@@ -34,7 +34,10 @@ interface ChatMsg {
 
       <div class="messages-area" #scrollRef>
         @if (loading()) {
-          <div class="loading-state">Loading messages...</div>
+          <div class="loading-state">
+            <div class="spinner"></div>
+            <span>Loading messages...</span>
+          </div>
         }
         @for (msg of messages(); track msg.id) {
           <div class="message-wrap" [class.own]="msg.senderId === currentUserId()">
@@ -48,7 +51,8 @@ interface ChatMsg {
         @if (messages().length === 0 && !loading()) {
           <div class="empty-chat">
             <div class="empty-icon">💬</div>
-            <p>No messages yet. Say hi!</p>
+            <p class="empty-title">No messages yet</p>
+            <p class="empty-sub">Start the conversation — say hi! 👋</p>
           </div>
         }
       </div>
@@ -107,10 +111,22 @@ interface ChatMsg {
     .msg-name { font-size: 0.7rem; color: var(--text-muted); font-weight: 600; padding: 0 6px; }
     .empty-chat {
       flex: 1; display: flex; flex-direction: column; align-items: center;
-      justify-content: center; gap: 12px; color: var(--text-muted);
+      justify-content: center; gap: 10px; color: var(--text-muted);
     }
     .empty-icon { font-size: 3rem; }
-    .loading-state { text-align: center; color: var(--text-muted); padding: 24px; }
+    .empty-title { font-size: 1rem; font-weight: 700; color: var(--text); margin: 0; }
+    .empty-sub { font-size: 0.85rem; color: var(--text-muted); margin: 0; }
+    .loading-state {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 14px; color: var(--text-muted); font-size: 0.9rem;
+    }
+    .spinner {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 3px solid var(--border);
+      border-top-color: var(--brand);
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
     .chat-input-bar {
       display: flex; gap: 10px; padding: 14px 16px;
       border-top: 1px solid var(--border); background: var(--bg-elevated); flex-shrink: 0;
@@ -143,7 +159,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   private pollTimer: any;
 
   currentUserId() {
-    return this.auth.currentUser()?.id ?? 0;
+    return this.auth.currentUser()?.userId ?? 0;
   }
 
   ngOnInit() {
